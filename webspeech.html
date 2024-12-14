@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Speech to Text Example</title>
+  </head>
+  <body>
+    <h1>Speech to Text</h1>
+    <button id="startButton">Start Listening</button>
+    <button id="stopButton">Stop Listening</button>
+    <p><strong>Recognized Text:</strong></p>
+    <p id="output"></p>
+
+    <script>
+      const startButton = document.getElementById("startButton");
+      const stopButton = document.getElementById("stopButton");
+      const output = document.getElementById("output");
+
+      // Check if the browser supports the Web Speech API
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+
+      if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+        recognition.lang = "en-US"; // Set the language for speech recognition
+        recognition.interimResults = false; // Do not show partial (interim) results
+        recognition.continuous = false; // Stop recognizing when speech ends
+
+        // Start speech recognition
+        startButton.addEventListener("click", () => {
+          recognition.start();
+          console.log("Speech recognition started...");
+        });
+
+        // Stop speech recognition
+        stopButton.addEventListener("click", () => {
+          recognition.stop();
+          console.log("Speech recognition stopped.");
+        });
+
+        // When speech is successfully recognized
+        recognition.onresult = function (event) {
+          const transcript = event.results[0][0].transcript;
+          output.textContent = transcript; // Display the recognized text
+          console.log("Recognized text:", transcript);
+        };
+
+        // When there is an error
+        recognition.onerror = function (event) {
+          console.error("Speech recognition error:", event.error);
+          alert("Error occurred during speech recognition: " + event.error);
+        };
+      } else {
+        alert("Sorry, your browser does not support the Web Speech API.");
+      }
+    </script>
+  </body>
+</html>

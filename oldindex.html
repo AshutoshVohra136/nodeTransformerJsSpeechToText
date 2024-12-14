@@ -1,0 +1,98 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Submission with Speech Recognition</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <h1>Form to Save Data</h1>
+    <form id="dataForm">
+      <label for="name">Name:</label><br />
+      <input
+        type="text"
+        id="name"
+        name="name"
+        placeholder="Say your name..."
+      /><br /><br />
+
+      <label for="address">Address:</label><br />
+      <input
+        type="text"
+        id="address"
+        name="address"
+        placeholder="Say your address..."
+      /><br /><br />
+
+      <label for="note">Note:</label><br />
+      <textarea id="note" name="note" placeholder="Say your note..."></textarea
+      ><br /><br />
+
+      <button type="submit">Save</button>
+    </form>
+
+    <button id="startSpeech">Start Speech Recognition</button>
+  </body>
+</html>
+
+<script>
+  const startSpeechButton = document.getElementById("startSpeech");
+  const nameField = document.getElementById("name");
+  const addressField = document.getElementById("address");
+  const noteField = document.getElementById("note");
+
+  const recognition = new (window.SpeechRecognition ||
+    window.webkitSpeechRecognition)();
+  recognition.lang = "en-US";
+  recognition.interimResults = true;
+
+  startSpeechButton.addEventListener("click", () => {
+    recognition.start();
+  });
+
+  recognition.addEventListener("result", (event) => {
+    const transcript = event.results[event.resultIndex][0].transcript;
+    console.log("Recognized speech:", transcript);
+
+    if (event.results[0].isFinal) {
+      if (nameField.value === "") {
+        nameField.value = transcript;
+        console.log("Name field filled:", nameField.value);
+      } else if (addressField.value === "") {
+        addressField.value = transcript;
+        console.log("Address field filled:", addressField.value);
+      } else if (noteField.value === "") {
+        noteField.value = transcript;
+        console.log("Note field filled:", noteField.value);
+      }
+    }
+  });
+
+  recognition.addEventListener("end", () => {
+    console.log("Speech recognition ended");
+  });
+
+  document.getElementById("dataForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const name = nameField.value;
+    const address = addressField.value;
+    const note = noteField.value;
+
+    console.log("Form data before submission:", { name, address, note });
+
+    axios
+      .post("/saveData", {
+        name: name,
+        address: address,
+        note: note,
+      })
+      .then((response) => {
+        console.log("Data saved:", response.data);
+      })
+      .catch((error) => {
+        console.error("There was an error!", error);
+      });
+  });
+</script> -->

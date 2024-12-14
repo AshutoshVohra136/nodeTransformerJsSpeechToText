@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Speech + Transformers</title>
+    <style>
+      .modal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+        width: 80%; /* Adjust width to fit content */
+      }
+      .modal.active {
+        display: block;
+      }
+      .tenor-gif-embed {
+        max-width: 100%;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="start-recognition">Start Speech Recognition</button>
+
+    <div id="modal" class="modal">
+      <!-- Replacing Pushpa GIF with Siri GIF -->
+      <div
+        class="tenor-gif-embed"
+        data-postid="25179853"
+        data-share-method="host"
+        data-aspect-ratio="1.18959"
+        data-width="100%"
+      >
+        <a href="https://tenor.com/view/siri-gif-25179853">Siri GIF</a> from
+        <a href="https://tenor.com/search/siri-gifs">Siri GIFs</a>
+      </div>
+      <script
+        type="text/javascript"
+        async
+        src="https://tenor.com/embed.js"
+      ></script>
+
+      <button id="close-modal">Close Modal</button>
+    </div>
+
+    <script>
+      const modal = document.getElementById("modal");
+      const startRecognitionButton =
+        document.getElementById("start-recognition");
+      const closeModalButton = document.getElementById("close-modal");
+      let recognition;
+
+      // Initialize Speech Recognition
+      try {
+        const SpeechRecognition =
+          window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.lang = "en-US";
+
+        recognition.onstart = () => console.log("Speech recognition started");
+        recognition.onresult = async (event) => {
+          const transcript = event.results[0][0].transcript
+            .trim()
+            .toLowerCase();
+          console.log(`Recognized speech: ${transcript}`);
+
+          // Open modal when "hello life" is spoken
+          if (transcript === "hello life") {
+            modal.classList.add("active");
+          }
+        };
+        recognition.onerror = (error) =>
+          console.error("Speech recognition error:", error);
+        recognition.onend = () => console.log("Speech recognition ended");
+      } catch (e) {
+        console.error("SpeechRecognition is not supported in this browser.");
+      }
+
+      // Button Event Listeners
+      startRecognitionButton.addEventListener("click", () => {
+        if (recognition && recognition.state !== "stopped") {
+          recognition.stop();
+        }
+        recognition.start();
+      });
+
+      closeModalButton.addEventListener("click", () => {
+        modal.classList.remove("active");
+      });
+    </script>
+  </body>
+</html>
